@@ -1,0 +1,10 @@
+.logo {
+  height: 32px;
+  margin: 16px;
+  background: rgba(255, 255, 255, 0.3);
+}
+  
+.card-class{
+    margin-bottom: 50px;
+    margin-top: 50px;
+}
