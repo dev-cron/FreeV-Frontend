@@ -26,9 +26,10 @@ const Login = () => {
 
     const Register = useCallback(() => navigate('/reg', {replace: false}), [navigate]);
 
-    const onFinish = (values) => {
-        axios.post('/login',values).then(res=>{
-           console.log(res); 
+    const onFinish = async (values) => {
+        console.log(values.user);
+        axios.post('/signin',values.user).then(() => {
+           navigate('/',{replace:false});
         });
     };
 

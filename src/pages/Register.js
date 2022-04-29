@@ -28,7 +28,7 @@ const validateMessages = {
 
 const Register = () => {
 
-  const [data, setdata] = useState([]);
+  const [data, setdata] = useState();
 
   const navigate = useNavigate();
 
@@ -37,18 +37,20 @@ const Register = () => {
   
 
   const onFinish = (values) => {
-    console.log(values);
-    setdata(values);
-    if(values.user.age>18){
-      //do normal login
-      console.log("less than 18 fired");
-      axios.post('/register',values)
+    const {user} = values;
+    
+    setdata(user);
+    
+    if(user.age<18){
+      
+      axios.post('/register/register',user)
       .then(
-        alert("Now login to continue")
+        alert("Now login to continue"),
+        navigate('/login')
       );
     }
     else{
-      navigate('/verify',{state:{data}});
+      navigate('/verify',{state:user});
     }
   };
 

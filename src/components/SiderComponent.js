@@ -20,7 +20,7 @@ export const SiderComponent = () => {
     setcollapsed(!collapsed);
   };
 
-  const Account = useCallback(() => navigate('/reg', {replace: false}), [navigate]);
+  const Account = useCallback(() => navigate('/login', {replace: false}), [navigate]);
 
   const Subscriptions = useCallback(() => navigate('/subs', {replace: false}), [navigate]);
 

@@ -1,4 +1,4 @@
-import { React, useEffect, useState, useRef } from "react";
+import { React, useEffect, useRef } from "react";
 
 import { Link } from "react-router-dom";
 
@@ -20,25 +20,28 @@ const { Header, Content } = Layout;
 const { Meta } = Card;
 
 const Home = () => {
-  const imgSrc = useRef();
-
   const images = [];
 
-  const [videos, setvideos] = useState([]);
+  const videos = useRef([]);
 
   const loadVideos = async () => {
-    await axios.get("http://localhost:5000/").then((res) => {
-      setvideos(res.data[0]);
-      console.log(res.data[0]);
-    });
+
+   try{
+      await axios.get('http://localhost:5000/',{
+      withCredentials:true
+    }).then((res)=>{
+      console.log(res.data);
+      videos.current = res.data;
+      console.log(videos);
+    })
+   }
+   catch(err){
+     console.log(err);
+   } 
   };
 
-  // function imgData(src){
-  //   return Buffer.from(src).toString("base64");
-  // }
-  
   function loadimagedata() {
-    videos.forEach((item) => {
+    videos.current.forEach((item) => {
       images.push(
         `data:image/jpeg;base64,${Buffer.from(item.img.data.data).toString(
           "base64"
@@ -50,7 +53,7 @@ const Home = () => {
   useEffect(() => {
     console.log("useeffectworking");
     loadVideos();
-  }, []);
+  }, [videos]);
 
   return (
     <>
@@ -64,9 +67,10 @@ const Home = () => {
             <div className="site-layout-content">
               <Row gutter={[16, 16]} justify={"space-between"}>
               
-              {videos.length===0?<h1>wait....</h1>:videos.map((item,index)=>{
+              {videos.current.length===0?<h1>wait....</h1>:videos.current.map((item,index)=>{
                
               loadimagedata();
+              console.log(videos.current);
               return (
                 
 
@@ -97,22 +101,9 @@ const Home = () => {
                 </Col>
                 </Link>
           );})}
-
-                {/* {videos.length === 0 ? (
-                  <h1>wait....</h1>
-                ) : (
-                  videos.map((item, index) => {
-                    loadimagedata();
-                    console.log(images);
-                    return (
-                      <>
-                      <img src={images[index]} alt="img"/>
-                      </>
-                    );
-                  })
-                )} */}
-              </Row>
-            </div>
+          </Row>
+          </div>
+         
           </Content>
 
           <FooterComponent />
