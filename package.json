@@ -2,7 +2,7 @@
   "name": "front-end",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:5000",
+  "proxy": "http://localhost:5000/",
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
     "@testing-library/jest-dom": "^5.16.2",
@@ -11,13 +11,15 @@
     "@vladmandic/face-api": "^1.6.7",
     "antd": "^4.19.4",
     "axios": "^0.26.1",
-    "buffer": "^6.0.3",
     "face-api.js": "^0.22.2",
+    "js-cookie": "^3.0.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-dropzone": "^12.0.4",
+    "react-file-base64": "^1.0.3",
     "react-router-dom": "^6.2.2",
     "react-scripts": "5.0.0",
+    "short-unique-id": "^4.4.4",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

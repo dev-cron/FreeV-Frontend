@@ -65,7 +65,7 @@ const Login = () => {
                   name={["user", "password"]}
                   label="Password" 
                 >
-                <Input />
+                <Input.Password/>
                 </Form.Item>
                 
                 <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>

@@ -1,42 +1,145 @@
-import React from "react";
-import { Layout } from "antd";
-import { Upload, message, Button } from "antd";
-import { UploadOutlined } from "@ant-design/icons";
+import { React, useState } from "react";
+import { SiderComponent } from "../components/SiderComponent";
+import { FooterComponent } from "../components/FooterComponent";
+import { Layout, Form, Button, Upload, Input, Switch, message } from "antd";
+import { InboxOutlined } from "@ant-design/icons";
+import { useNavigate } from "react-router-dom";
+import FileBase64 from 'react-file-base64';
+import axios from "axios";
 
-const { Header, Content, Footer } = Layout;
+const suid = require('short-unique-id');
 
-const props = {
-  name: "file",
-  action: "http://localhost:5000/datacheck",
-  headers: {
-   "Content-Type":"multipart/form-data", 
+const { Header, Content } = Layout;
+
+const formItemLayout = {
+  labelCol: {
+    span: 6,
   },
-  onChange(info) {
-    if (info.file.status !== "uploading") {
-      console.log(info.file, info.fileList);
-    }
-    if (info.file.status === "done") {
-      message.success(`${info.file.name} file uploaded successfully`);
-    } else if (info.file.status === "error") {
-      message.error(`${info.file.name} file upload failed.`);
-    }
+  wrapperCol: {
+    span: 14,
   },
 };
 
+
+const dummyRequest = ({ file, onSuccess }) => {
+  setTimeout(() => {
+    onSuccess("ok");
+  }, 0);
+};
+
+async function videoUpload(values,uuid){
+
+  const config = {
+    headers: {
+      'content-type': 'multipart/form-data',
+    },
+    withCredentials:true
+  };
+
+  const videoData = new FormData();
+  videoData.append('title',uuid);
+  videoData.append('video',values.video);
+  await axios.post('/upload-video',videoData,config);
+}
+
 function MyUpload() {
+  const navigate = useNavigate();
+  const [Image, setImage] = useState("");
+
+  const onFinish = async (values) => {
+    console.log("Received values of form: ", values);
+    
+    if(!values.nsfw){
+      values.nsfw = "false";
+    }
+
+    const config = {
+      headers: {
+        'content-type': 'application/x-www-form-urlencoded',
+      },
+      withCredentials:true
+    };
+   
+    const uuid = new suid({length:7});
+    const videoID = uuid();
+
+    const formData = new URLSearchParams();
+    formData.append("title",values.title);
+    formData.append("image",Image);
+    formData.append("nsfw",values.nsfw);
+    formData.append("uuid",videoID);
+
+
+    await axios.post('/upload-data', formData, config)
+    .then(
+        videoUpload(values,videoID)
+    )
+    .then(res=>message.success(res.data))
+    .then(()=>{navigate('/',{replace:true})})
+  
+  };
+
   return (
     <>
       <Layout style={{ minHeight: "100vh" }}>
+        <SiderComponent />
         <Layout className="site-layout">
           <Header className="site-layout-background" style={{ padding: 0 }} />
           <Content style={{ margin: "0 16px" }}>
-            <Upload {...props}>
-              <Button icon={<UploadOutlined />}>Click to Upload</Button>
-            </Upload>
+            
+            <Form name="validate_other" {...formItemLayout} onFinish={onFinish}>
+              <Form.Item name="title" label="Title">
+                <Input />
+              </Form.Item>
+              
+              <Form.Item
+                name="Thumbnail"
+                label="Thumbnail"
+              > 
+                <FileBase64
+                multiple={ false }
+                onDone={({base64})=>{setImage(base64)}}/>
+              </Form.Item>
+
+              <Form.Item label="Video">
+                <Form.Item
+                  name="video"
+                  getValueFromEvent={({file}) => file.originFileObj}
+                  noStyle
+                >
+                  <Upload.Dragger 
+                  name="video" 
+                  maxCount={1} 
+                  accept="video/mp4"
+                  customRequest={dummyRequest}
+                  >
+                    <p className="ant-upload-drag-icon">
+                      <InboxOutlined />
+                    </p>
+                    <p className="ant-upload-text">
+                      Click or drag file to this area to upload
+                    </p>
+                  </Upload.Dragger>
+                </Form.Item>
+              </Form.Item>
+
+              <Form.Item name="nsfw" label="NSFW" valuePropName="checked">
+                <Switch />
+              </Form.Item>
+
+              <Form.Item
+                wrapperCol={{
+                  span: 12,
+                  offset: 6,
+                }}
+              >
+                <Button type="primary" htmlType="submit">
+                  Submit
+                </Button>
+              </Form.Item>
+            </Form>
           </Content>
-          <Footer style={{ textAlign: "center" }}>
-            Cool video platform here for sharing videos freely and unrestricted
-          </Footer>
+          <FooterComponent />
         </Layout>
       </Layout>
     </>

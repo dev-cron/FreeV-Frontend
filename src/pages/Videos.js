@@ -1,20 +1,46 @@
-import React from 'react'
-import {useParams} from 'react-router-dom';
+import React from "react";
+
+import { Layout, Row } from "antd";
+
+import { SiderComponent } from "../components/SiderComponent";
+
+import { FooterComponent } from "../components/FooterComponent";
+
+import { useParams } from "react-router-dom";
+
+const { Header, Content } = Layout;
 
 export const Videos = () => {
-  const {param} = useParams();
+  
+  const { param } = useParams();
+  
   return (
     <>
-    <h2>HTTP Video Streaming</h2>
-    <p>This video is 61MB and is being streamed instead of downloaded.</p>
-    <p>
-      Feel free to seek through the video and it only loads the part you want to
-      watch
-    </p>
-    <video id="videoPlayer" width="650" controls muted="muted" autoplay>
-      <source src={`/mongo-video/${param}`} type="video/mp4" />
-    </video>
-    <i>Big Buck Bunny</i>
+      <Layout style={{ minHeight: "100vh" }}>
+        <SiderComponent />
+
+        <Layout className="site-layout">
+          <Header className="site-layout-background" style={{ padding: 0 }} />
+
+          <Content style={{ margin: "0 16px" }}>
+            <div className="site-layout-content">
+              <Row gutter={[16, 16]} justify={"space-between"}>
+                <video
+                  id="videoPlayer"
+                  width="750"
+                  height="550"
+                  controls
+                  autoPlay  
+                >
+                  <source src={`/mongo-video/${param}`} type="video/mp4" />
+                </video>
+              </Row>
+            </div>
+          </Content>
+
+          <FooterComponent />
+        </Layout>
+      </Layout>
     </>
-  )
-}
+  );
+};
