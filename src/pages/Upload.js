@@ -6,10 +6,11 @@ import { InboxOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import FileBase64 from 'react-file-base64';
 import axios from "axios";
+import { HeaderComponent } from "../components/HeaderComponent";
 
 const suid = require('short-unique-id');
 
-const { Header, Content } = Layout;
+const { Content } = Layout;
 
 const formItemLayout = {
   labelCol: {
@@ -84,8 +85,8 @@ function MyUpload() {
       <Layout style={{ minHeight: "100vh" }}>
         <SiderComponent />
         <Layout className="site-layout">
-          <Header className="site-layout-background" style={{ padding: 0 }} />
-          <Content style={{ margin: "0 16px" }}>
+          <HeaderComponent/> 
+          <Content style={{ margin: "20px 16px" }}>
             
             <Form name="validate_other" {...formItemLayout} onFinish={onFinish}>
               <Form.Item name="title" label="Title">

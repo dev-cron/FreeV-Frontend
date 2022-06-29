@@ -3,6 +3,7 @@ import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import * as faceapi from "@vladmandic/face-api";
 import "../css/Facerecog.css";
+import { message } from "antd";
 
 export const Facerecog = () => {
   const navigate = useNavigate();
@@ -20,13 +21,17 @@ export const Facerecog = () => {
   const canvasRef = useRef();
 
   const startVideo = () => {
-    if (navigator.mediaDevices.getUserMedia) {
-      navigator.mediaDevices.getUserMedia({ video: true }).then(function (s) {
+    
+    if(navigator.mediaDevices.getUserMedia) {
+      navigator.mediaDevices.getUserMedia({ video: true })
+      .then(function (s) {
         videoRef.current.srcObject = s;
-      });
-    } else {
-      console.log("error");
-    }
+      })
+      .catch((err)=>{
+        message.error("No webcam found!");
+        message.warning("Webcam needed for verification");
+      })
+      }
   };
 
   const loadModels = async () => {

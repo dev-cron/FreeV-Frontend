@@ -1,10 +1,12 @@
-import { React , useCallback , useState} from "react";
+import { React , useCallback} from "react";
 import {useNavigate} from 'react-router-dom';
 import axios from 'axios';
 import "../css/Register.css";
-import { Form, Input, InputNumber, Button, Card, Layout} from "antd";
+import { Form, Input, InputNumber, Button, Card, Layout, message} from "antd";
+import { HeaderComponent } from "../components/HeaderComponent";
+import { FooterComponent } from "../components/FooterComponent";
 
-const { Header, Content, Footer } = Layout;
+const { Content } = Layout;
 
 const layout = {
   labelCol: {
@@ -28,8 +30,6 @@ const validateMessages = {
 
 const Register = () => {
 
-  const [data, setdata] = useState();
-
   const navigate = useNavigate();
 
   const Login = useCallback(() => navigate('/login', {replace: false}), [navigate]);
@@ -39,15 +39,18 @@ const Register = () => {
   const onFinish = (values) => {
     const {user} = values;
     
-    setdata(user);
-    
     if(user.age<18){
       
       axios.post('/register/register',user)
       .then(
-        alert("Now login to continue"),
-        navigate('/login')
-      );
+        message.success('Login to continue'),
+        navigate('/login',{replace:true})
+      )
+      .catch((err)=>{
+        if(err.response.status === 409){
+          message.warning("Email already registered!");
+        }
+      })
     }
     else{
       navigate('/verify',{state:user});
@@ -58,7 +61,7 @@ const Register = () => {
     <>
       <Layout style={{ minHeight: "100vh" }}>
         <Layout className="site-layout">
-          <Header className="site-layout-background" style={{ padding: 0 }} />
+          <HeaderComponent/> 
           <Content style={{ margin: "0 16px" }}>
             <Card size="larger" className="cardClass">
               <Form
@@ -123,9 +126,7 @@ const Register = () => {
             </Card>
           </Content>
 
-          <Footer style={{ textAlign: "center" }}>
-            Cool video platform here for sharing videos freely and unrestricted
-          </Footer>
+          <FooterComponent/> 
         </Layout>
       </Layout>
     </>

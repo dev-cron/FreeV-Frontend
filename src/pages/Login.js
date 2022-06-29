@@ -1,7 +1,7 @@
 import { React , useCallback } from "react";
 import {useNavigate} from 'react-router-dom';
 import axios from 'axios';
-import { Form, Input, Button, Card, Layout} from "antd";
+import { Form, Input, Button, Card, Layout, message} from "antd";
 
 const { Header, Content, Footer } = Layout;
 
@@ -27,10 +27,15 @@ const Login = () => {
     const Register = useCallback(() => navigate('/reg', {replace: false}), [navigate]);
 
     const onFinish = async (values) => {
-        console.log(values.user);
-        axios.post('/signin',values.user).then(() => {
+        await axios.post('/signin',values.user)
+        .then(() => {
            navigate('/',{replace:false});
-        });
+        })
+        .catch((err)=>{
+          if(err.response.status === 401){
+           message.warning("Incorrect email or password"); 
+          }
+        })
     };
 
 
@@ -40,7 +45,6 @@ const Login = () => {
         <Layout className="site-layout">
           <Header className="site-layout-background" style={{ padding: 0 }} />
           <Content style={{ margin: "0 16px" }}>
-            
             
             <Card size="larger" className="cardClass">
               <Form

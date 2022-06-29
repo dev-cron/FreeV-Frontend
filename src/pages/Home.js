@@ -10,8 +10,10 @@ import { SiderComponent } from "../components/SiderComponent";
 
 import { FooterComponent } from "../components/FooterComponent";
 
+import { HeaderComponent } from "../components/HeaderComponent";
 
-const { Header, Content } = Layout;
+
+const { Content } = Layout;
 
 const { Meta } = Card;
 
@@ -21,7 +23,7 @@ const Home = () => {
   const loadVideos = async () => {
     try {
       await axios
-        .get("http://localhost:5000/", {
+        .get("/home", {
           withCredentials: true,
         })
         .then((res) => {
@@ -42,9 +44,10 @@ const Home = () => {
         <SiderComponent />
 
         <Layout className="site-layout">
-          <Header className="site-layout-background" style={{ padding: 0 }} />
-
-          <Content style={{ margin: "0 16px" }}>
+            
+          <HeaderComponent/>
+          
+          <Content style={{ margin: "20px 16px" }}>
             <div className="site-layout-content">
               <Row gutter={[16, 16]} justify={"space-between"}>
                 {Videos.length === 0 ? (
@@ -54,13 +57,21 @@ const Home = () => {
                 ) : (
                   Videos.map((item, index) => {
                     return (
-                      <Link to={`/stream/${item.uuid}`}>
+                      <Link to={`/stream/${item.uuid}`} key={index}>
                         <Col className="gutter-row" span={4.5}>
                           <Card
                             className="card-class"
                             hoverable
                             style={{ width: 300 }}
-                            cover={<img alt="example" src={item.img} />}
+                            cover={
+                              <div style={{ overflow: "hidden", height: "250px"}}>
+                                <img
+                                  alt="example"
+                                  style={{ height: "100%" , width:"100%" }}
+                                  src={item.img}
+                                />
+                              </div>
+                            }
                           >
                             <Meta
                               avatar={

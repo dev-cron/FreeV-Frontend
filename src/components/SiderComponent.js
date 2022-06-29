@@ -3,13 +3,16 @@ import Cookies from 'js-cookie';
 import {useNavigate , Link} from 'react-router-dom';
 import {Menu , Layout} from 'antd';
 import {
-    VideoCameraOutlined,
     UserOutlined,
-    UploadOutlined
+    UploadOutlined,
+    PlaySquareOutlined,
+    LogoutOutlined,
+    AppstoreOutlined
 } from '@ant-design/icons';
 import bigLogo from '../assets/bigfreev.png';
 import smolLogo from '../assets/smolfreev.png';
 import '../css/Sider.css';
+import SubMenu from 'antd/lib/menu/SubMenu';
 
 const {Sider} = Layout;
 
@@ -24,31 +27,44 @@ export const SiderComponent = () => {
     setcollapsed(!collapsed);
   };
 
-  const Account = useCallback(() => navigate('/login', {replace: false}), [navigate]);
 
-  const Subscriptions = useCallback(() => navigate('/subs', {replace: false}), [navigate]);
+  const Account = useCallback(() => navigate('/account', {replace: false}), [navigate]);
+
+  const userVideos = useCallback(() => navigate('/userVideos', {replace: false}), [navigate]);
+
+  const SignIn = useCallback(() => navigate('/login', {replace: false}), [navigate]); 
+
+  const User = Cookies.get('isUser');
 
   const Upload = () => {
     const Cookie = Cookies.get('isUser');
     console.log(Cookie);
-    if(Cookie === '1'){navigate('/upload', {replace: false});}
+    if(Cookie !== 'Sign In'){navigate('/upload', {replace: false});}
     else navigate('/login',{replace:true});
+  }
+
+  const logout = async () => {
+
   }
 
   return (
     <Sider collapsible collapsed={collapsed} onCollapse={onCollapse}>
     <Link to="/"><div className="logo">
       {collapsed?<img src={smolLogo} alt="logo"/>:<img src={bigLogo} alt="logo"/>}
-    </div></Link>
+    </div>
+    </Link>
     <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
-      <Menu.Item key="1" icon={<UserOutlined />} title="User" onClick={Account}>
-        Account 
-      </Menu.Item>
+      {User === 'Sign In'?
+      <Menu.Item key="1" icon={<UserOutlined />} title="User" onClick={SignIn}>
+        Sign In
+      </Menu.Item> :
+      <SubMenu key="sub1" title={<span><AppstoreOutlined/><span>{User}</span></span>}>
+            <Menu.Item key="3" icon={<UserOutlined/>} onClick={Account}>Account</Menu.Item>
+            <Menu.Item key="4" icon={<PlaySquareOutlined/>} onClick={userVideos}>Your videos</Menu.Item>
+            <Menu.Item key="5" icon={<LogoutOutlined/>} onClick={logout}>Logout</Menu.Item>
+        </SubMenu>}
       <Menu.Item key="2" icon={<UploadOutlined />} onClick={Upload}>
         Upload 
-      </Menu.Item>
-      <Menu.Item key="9" icon={<VideoCameraOutlined />} onClick={Subscriptions}>
-        Subscriptions
       </Menu.Item>
     </Menu>
   </Sider>
