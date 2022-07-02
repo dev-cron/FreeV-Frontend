@@ -13,6 +13,7 @@ import bigLogo from '../assets/bigfreev.png';
 import smolLogo from '../assets/smolfreev.png';
 import '../css/Sider.css';
 import SubMenu from 'antd/lib/menu/SubMenu';
+import axios from 'axios';
 
 const {Sider} = Layout;
 
@@ -37,14 +38,12 @@ export const SiderComponent = () => {
   const User = Cookies.get('isUser');
 
   const Upload = () => {
-    const Cookie = Cookies.get('isUser');
-    console.log(Cookie);
-    if(Cookie !== 'Sign In'){navigate('/upload', {replace: false});}
+    if(User !== 'Sign In'){navigate('/upload', {replace: false});}
     else navigate('/login',{replace:true});
   }
 
-  const logout = async () => {
-
+  const logout = () => {
+    console.log('logged out!');
   }
 
   return (

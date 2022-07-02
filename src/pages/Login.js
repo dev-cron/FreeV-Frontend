@@ -2,6 +2,8 @@ import { React , useCallback } from "react";
 import {useNavigate} from 'react-router-dom';
 import axios from 'axios';
 import { Form, Input, Button, Card, Layout, message} from "antd";
+import '../css/Card.css';
+import { SiderComponent } from "../components/SiderComponent";
 
 const { Header, Content, Footer } = Layout;
 
@@ -42,6 +44,7 @@ const Login = () => {
   return (
     <>
       <Layout style={{ minHeight: "100vh" }}>
+        <SiderComponent/>
         <Layout className="site-layout">
           <Header className="site-layout-background" style={{ padding: 0 }} />
           <Content style={{ margin: "0 16px" }}>
@@ -73,10 +76,12 @@ const Login = () => {
                 </Form.Item>
                 
                 <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
-                  <Button type="primary" htmlType="submit">
+                <div>
+                <Button type="primary" htmlType="submit">
                     Submit
                   </Button>
                   <Button type="dashed" style={{marginLeft:10}} onClick={Register}> Or Register </Button>
+                </div>
                 </Form.Item>
 
               </Form>

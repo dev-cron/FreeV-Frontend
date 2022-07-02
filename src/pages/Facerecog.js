@@ -1,14 +1,28 @@
 import { React, useState, useEffect, useRef } from "react";
+import { Layout, Spin } from "antd";
+import { FooterComponent } from "../components/FooterComponent";
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import * as faceapi from "@vladmandic/face-api";
 import "../css/Facerecog.css";
 import { message } from "antd";
 
+const { Content, Header } = Layout;
+
+const stopVideo = () => {
+  navigator.mediaDevices
+    .getUserMedia({ video: true, audio: false })
+    .then((mediaStream) => {
+      const stream = mediaStream;
+      const tracks = stream.getTracks();
+      tracks.forEach((track) => track.stop());
+    });
+};
+
 export const Facerecog = () => {
   const navigate = useNavigate();
 
-  const  {state} = useLocation();
+  const { state } = useLocation();
 
   console.log(state);
 
@@ -21,17 +35,21 @@ export const Facerecog = () => {
   const canvasRef = useRef();
 
   const startVideo = () => {
-    
-    if(navigator.mediaDevices.getUserMedia) {
-      navigator.mediaDevices.getUserMedia({ video: true })
-      .then(function (s) {
-        videoRef.current.srcObject = s;
-      })
-      .catch((err)=>{
-        message.error("No webcam found!");
-        message.warning("Webcam needed for verification");
-      })
+    if (state) {
+      if (navigator.mediaDevices.getUserMedia) {
+        navigator.mediaDevices
+          .getUserMedia({ video: true })
+          .then(function (s) {
+            videoRef.current.srcObject = s;
+          })
+          .catch((err) => {
+            message.error("No webcam found!");
+            message.warning("Webcam needed for verification");
+          });
       }
+    } else {
+      navigate("/reg", { replace: true });
+    }
   };
 
   const loadModels = async () => {
@@ -81,23 +99,26 @@ export const Facerecog = () => {
         else {
           let count = 0;
           clearInterval(Interval);
-          navigator.mediaDevices.getUserMedia({video:false});
+          navigator.mediaDevices.getUserMedia({ video: false });
           ages.forEach((ele) => {
             if (ele[0].age >= 18) {
               count++;
             }
           });
           if (count >= 3) {
-            axios
-              .post("/register/register", state)
-              
-              .then(alert("Now login to continue")
-              
-              .then(navigate("/login",{replace:true})))
-          } 
-          else {
-            alert("you are not 18+");
-            navigate('/register',{replace:true});
+            await axios.post("/register/register", state)
+            .then(
+            stopVideo(),
+            message.success("Done! Now login to continue"),
+            navigate("/login", { replace: true }),
+            )
+            .catch((err)=>{
+              message.error("Some error occured, please retry");
+            })
+          } else {
+            stopVideo(); 
+            message.warning("You are not 18+");
+            navigate("/register", { replace: true });
           }
         }
       }
@@ -121,18 +142,30 @@ export const Facerecog = () => {
   }, []);
 
   return (
-    <div className="face-recog-div">
-      <span>{initializing ? "Initializing" : "Ready"}</span>
+    <>
+      <Layout style={{ minHeight: "100vh" }}>
+        <Layout className="site-layout">
+          <Header className="site-layout-background" style={{ padding: 0 }} />
 
-      <video
-        ref={videoRef}
-        autoPlay="true"
-        height="750"
-        width="750"
-        onPlay={handelVideoOnPlay}
-      />
+          <Content style={{ margin: "6px 16px" }}>
+            <div className="face-recog-div">
+              <video
+                ref={videoRef}
+                autoPlay="true"
+                height="750"
+                width="750"
+                onPlay={handelVideoOnPlay}
+              />
+              <canvas ref={canvasRef} className="canvas-class" />
+            </div>
+            <h3 style={{ textAlign: "center" }}>
+              {initializing ? <Spin /> : "Please look at the camera"}
+            </h3>
+          </Content>
 
-      <canvas ref={canvasRef} className="canvas-class" />
-    </div>
+          <FooterComponent />
+        </Layout>
+      </Layout>
+    </>
   );
 };
