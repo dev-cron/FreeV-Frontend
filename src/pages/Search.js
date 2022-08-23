@@ -16,7 +16,7 @@ const Search = () => {
   async function getSearch(q){
     const form = new URLSearchParams();
     form.append('query',query);
-    await axios.get('http://localhost:5000/search',form)
+    await axios.get('/search',form)
     .then((res)=>{console.log(res)})
   }
 

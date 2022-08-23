@@ -7,7 +7,8 @@ import {
     UploadOutlined,
     PlaySquareOutlined,
     LogoutOutlined,
-    AppstoreOutlined
+    AppstoreOutlined,
+    HomeOutlined
 } from '@ant-design/icons';
 import bigLogo from '../assets/bigfreev.png';
 import smolLogo from '../assets/smolfreev.png';
@@ -29,7 +30,7 @@ export const SiderComponent = () => {
   };
 
 
-  const Account = useCallback(() => navigate('/account', {replace: false}), [navigate]);
+  const Home = useCallback(() => navigate('/', {replace: true}), [navigate]);
 
   const userVideos = useCallback(() => navigate('/userVideos', {replace: false}), [navigate]);
 
@@ -42,8 +43,14 @@ export const SiderComponent = () => {
     else navigate('/login',{replace:true});
   }
 
-  const logout = () => {
-    console.log('logged out!');
+  const logout = async () => {
+    try {
+      await axios
+        .get("/logout")
+        .then(() => window.location.reload());
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   return (
@@ -58,7 +65,7 @@ export const SiderComponent = () => {
         Sign In
       </Menu.Item> :
       <SubMenu key="sub1" title={<span><AppstoreOutlined/><span>{User}</span></span>}>
-            <Menu.Item key="3" icon={<UserOutlined/>} onClick={Account}>Account</Menu.Item>
+            <Menu.Item key="3" icon={<HomeOutlined/>} onClick={Home}>Home</Menu.Item>
             <Menu.Item key="4" icon={<PlaySquareOutlined/>} onClick={userVideos}>Your videos</Menu.Item>
             <Menu.Item key="5" icon={<LogoutOutlined/>} onClick={logout}>Logout</Menu.Item>
         </SubMenu>}
