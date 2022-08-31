@@ -21,7 +21,7 @@ export const HeaderComponent = () => {
     if(value===""){
       message.error("search can not be empty");
     }
-    else navigate(`/search/${value}`); 
+    else navigate(`/search/${value}`,{state:{query:value}}); 
   }
 
   return (

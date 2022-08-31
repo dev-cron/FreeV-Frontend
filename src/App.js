@@ -7,8 +7,7 @@ import Register from './pages/Register';
 import Login from './pages/Login';
 import  {Videos} from './pages/Videos';
 import {Facerecog}  from './pages/Facerecog';
-import Account from './pages/Account';
-import UserVideos from './pages/UserVideos';
+import Uservideos from './pages/Uservideos';
 import './css/App.css';
 
 const App = () => {
@@ -21,8 +20,7 @@ const App = () => {
             <Route path='/login' element={<Login/>}/>
             <Route path="/stream/:param" element={<Videos/>}/>
             <Route path='/verify' element={<Facerecog/>}/>
-            <Route path='/account' element={<Account/>}/>
-            <Route path='/userVideos' element={<UserVideos/>}/>
+            <Route path='/userVideos' element={<Uservideos/>}/>
             <Route path='/search/:query' element={<Search/>}/>
       </Routes>
    </div> 

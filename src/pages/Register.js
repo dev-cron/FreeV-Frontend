@@ -96,7 +96,7 @@ const Register = () => {
                   name={["user", "password"]}
                   label="Password" 
                 >
-                <Input />
+                <Input.Password/>
                 </Form.Item>
                 
                 <Form.Item
