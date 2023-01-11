@@ -40,7 +40,7 @@ async function videoUpload(values,uuid){
   const videoData = new FormData();
   videoData.append('title',uuid);
   videoData.append('video',values.video);
-  await axios.post('/upload-video',videoData,config);
+  await axios.post('https://freevbackend.onrender.com/upload-video',videoData,config);
 }
 
 function MyUpload() {
@@ -71,7 +71,7 @@ function MyUpload() {
     formData.append("uuid",videoID);
 
 
-    await axios.post('/upload-data', formData, config)
+    await axios.post('https://freevbackend.onrender.com/upload-data', formData, config)
     .then(
         videoUpload(values,videoID)
     )

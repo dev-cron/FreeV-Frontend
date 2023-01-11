@@ -41,7 +41,7 @@ const Register = () => {
     
     if(user.age<18){
       
-      axios.post('/register/register',user)
+      axios.post('https://freevbackend.onrender.com/register/register',user)
       .then(
         message.success('Login to continue'),
         navigate('/login',{replace:true})

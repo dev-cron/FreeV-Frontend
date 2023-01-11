@@ -46,7 +46,7 @@ export const SiderComponent = () => {
   const logout = async () => {
     try {
       await axios
-        .get("/logout")
+        .get("https://freevbackend.onrender.com/logout")
         .then(() => window.location.reload());
     } catch (err) {
       console.log(err);

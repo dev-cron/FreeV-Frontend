@@ -106,7 +106,7 @@ export const Facerecog = () => {
             }
           });
           if (count >= 3) {
-            await axios.post("/register/register", state)
+            await axios.post("https://freevbackend.onrender.com/register/register", state)
             .then(
             stopVideo(),
             message.success("Done! Now login to continue"),

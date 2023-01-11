@@ -23,7 +23,7 @@ const Home = () => {
   const loadVideos = async () => {
     try {
       await axios
-        .get("/home", {
+        .get("https://freevbackend.onrender.com/home", {
           withCredentials: true,
         })
         .then((res) => {

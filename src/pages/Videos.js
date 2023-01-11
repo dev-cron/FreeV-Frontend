@@ -34,7 +34,7 @@ export const Videos = () => {
                   autoPlay 
                   style={{border:"1px solid #000000"}}
                 >
-                  <source src={`/mongo-video/${param}`} type="video/mp4" />
+                  <source src={`https://freevbackend.onrender.com/mongo-video/${param}`} type="video/mp4" />
                 </video>
               </Row>
             </div>

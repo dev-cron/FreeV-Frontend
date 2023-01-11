@@ -16,7 +16,7 @@ const Search = () => {
   const location = useLocation();
   
   async function getSearch(q){
-    await axios.get(`/search/${q}`)
+    await axios.get(`https://freevbackend.onrender.com/search/${q}`)
     .then((res)=>{
       setresult(res.data);
       console.log(res.data)

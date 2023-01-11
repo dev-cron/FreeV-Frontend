@@ -15,7 +15,7 @@ const Uservideos = () => {
   const [videos, setvideos] = useState([]);
   
   async function getData(){
-    await axios.get('/videos',{
+    await axios.get('https://freevbackend.onrender.com/videos',{
       withCredentials:true
     })
     .then((obj)=>{
